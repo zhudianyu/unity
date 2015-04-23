@@ -1,0 +1,63 @@
+apply plugin: 'maven'
+
+uploadArchives {
+    repositories.mavenDeployer {
+        repository(url: "file:///Users/roscus/sourcecode/mvn")
+        pom.groupId = 'com.talkingsdk'
+        pom.version = '3.2.6.4'
+        pom.artifactId = 'libs-nd'
+    }
+}
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath System.getenv()['ANDROID_GRADLE_VERSION']
+    }
+}
+
+apply plugin: 'android-library'
+
+android {
+    compileSdkVersion 16
+    compileSdkVersion 19
+    buildToolsVersion System.getenv()["BUILD_TOOL_VERSION"]
+
+    defaultConfig {
+        minSdkVersion 8
+        targetSdkVersion 19
+        versionCode 1
+        versionName "1.0"
+    }
+
+    sourceSets {
+        main {
+            manifest.srcFile 'AndroidManifest.xml'
+            java.srcDir 'src'
+            res.srcDir 'res'
+            assets.srcDir 'assets'
+            resources.srcDir 'src'
+        }
+        test {
+            java.srcDir 'tests/src'
+        }
+    }
+    lintOptions {
+        abortOnError false
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: '*.jar')
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '1.12'
+}
